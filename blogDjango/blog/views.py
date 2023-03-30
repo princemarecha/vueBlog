@@ -1,15 +1,19 @@
 from django.http import Http404
+from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
-from .models import Blog
-from .serializer import BlogSerializer
+from .models import Blog, Category
+from .serializer import BlogSerializer, CategorySerializer
+
 
 class LatestBlogsList(APIView):
     def get(self, request, format=None):
         blogs = Blog.objects.all()[0:4]
         serializer = BlogSerializer(blogs, many=True)
         return Response(serializer.data)
+
 
 class BlogDetail(APIView):
     def get_object(self, category_slug, blog_slug):
@@ -18,8 +22,33 @@ class BlogDetail(APIView):
         except Blog.DoesNotExist:
             raise Http404
 
-    def get(self, request, category_slug,blog_slug, format=None):
+    def get(self, request, category_slug, blog_slug, format=None):
         blog = self.get_object(category_slug, blog_slug)
-        serializer  = BlogSerializer(blog)
+        serializer = BlogSerializer(blog)
         return Response(serializer.data)
+
+
+class CategoryDetail(APIView):
+    def get_object(self, category_slug):
+        try:
+            return Category.objects.get(slug=category_slug)
+        except Category.DoesNotExist:
+            raise Http404
+
+    def get(self, request, category_slug, format=None):
+        category = self.get_object(category_slug)
+        serializer = CategorySerializer(category)
+        return Response(serializer.data)
+
+@api_view(['POST'])
+def search(request):
+        query = request.data.get('query', '')
+
+        if query:
+            blogs = Blog.objects.filter(Q(name__icontains=query) | Q(content__icontains=query))
+            serializer = BlogSerializer(blogs, many=True)
+            return Response(serializer.data)
+
+        else:
+            return Response({"blogs": []})
 # Create your views here.

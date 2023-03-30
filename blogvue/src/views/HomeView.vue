@@ -16,20 +16,11 @@
           <h2 class="is-size-2 has-text-centered">Latest Blogs</h2>
       </div>
 
-      <div 
-      class="column is-3"
-      v-for="blog in latestBlogs"
-      v-bind:key="blog.id">
-      
-      <div class="box">
-        <figure class="image mb-4">
-            <img :src="blog.get_thumbnail">
-        </figure>
-      </div>
-
-      <h3 class="is-size-4">{{ blog.name }}</h3>
-      <router-link v-bind:to="blog.get_absolute_url" class="button is-dark mt-4">View Details</router-link>
-      </div>
+      <blogBox 
+              v-for="blog in latestBlogs "
+              v-bind:key="blog.id"
+              v-bind:blog="blog"> 
+      </blogBox>
 
   </div>
   </div>
@@ -38,6 +29,8 @@
 <script>
 
 import axios from 'axios'
+import blogBox from './blogBox.vue'
+
 export default {
   name: 'HomeView',
   data(){
@@ -46,7 +39,7 @@ export default {
     }
   },
   components: {
-
+    blogBox
   },
   mounted(){
     this.getLatestBlogs()
@@ -66,10 +59,3 @@ export default {
 }
 </script>
 
-<style scoped>
-.image {
-    margin-top: -1.25rem;
-    margin-left: -1.25rem;
-    margin-right: -1.25rem;
-}
-</style>
