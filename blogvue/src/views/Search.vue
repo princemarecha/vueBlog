@@ -6,11 +6,12 @@
 
                     <h2 class="is-size-5 has-text-grey">Search Term:"{{ query }}"</h2>
                 </div>
+                <div class="grid lg:grid-cols-3 md:grid-cols-2 mx-auto place-content-center">
                 <blogBox 
               v-for="blog in blogs "
               v-bind:key="blog.id"
               v-bind:blog="blog"/> 
-      
+            </div>
             </div>
     </div>
 </template>
