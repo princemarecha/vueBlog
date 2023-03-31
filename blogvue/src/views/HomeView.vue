@@ -11,17 +11,17 @@
       </div>
     </section>
 
-    <div class="columns is-multiline">
-      <div class="column is-12">
-          <h2 class="is-size-2 has-text-centered">Latest Blogs</h2>
+    <div class="">
+      <div class="">
+          <h2 class="is-size-2 ">Latest Blogs</h2>
       </div>
-
+  <div class="grid lg:grid-cols-3 md:grid-cols-2 mx-auto place-content-center">
       <blogBox 
               v-for="blog in latestBlogs "
               v-bind:key="blog.id"
               v-bind:blog="blog"> 
       </blogBox>
-
+    </div>
   </div>
   </div>
 </template>
@@ -43,6 +43,7 @@ export default {
   },
   mounted(){
     this.getLatestBlogs()
+
   },
   methods:{
     getLatestBlogs(){

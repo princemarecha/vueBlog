@@ -1,5 +1,6 @@
 from io import BytesIO
 from PIL import Image
+from django.contrib.auth.models import User
 
 from django.core.files import File
 from django.db import models
@@ -20,10 +21,12 @@ class Category(models.Model):
 
 class Blog(models.Model):
     category = models.ForeignKey(Category, related_name='blog', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     slug = models.SlugField()
     content = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to='uploads/', blank=True, null=True)
+    keywords = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='uploads/')
     thumbnail = models.ImageField(upload_to='uploads/', blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
 

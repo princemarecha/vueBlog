@@ -4,15 +4,21 @@ from .models import Category, Blog
 
 
 class BlogSerializer(serializers.ModelSerializer):
+    author = serializers.CharField()
     class Meta:
         model = Blog
         fields = (
             "id",
             "name",
+            "author",
             "get_absolute_url",
+            "image",
+            "category",
+            "slug",
             "content",
             "get_image",
-            "get_thumbnail"
+            "get_thumbnail",
+            "date_added"
         )
 
 

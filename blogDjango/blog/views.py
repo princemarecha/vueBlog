@@ -3,6 +3,7 @@ from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework import viewsets
 
 from .models import Blog, Category
 from .serializer import BlogSerializer, CategorySerializer
@@ -14,6 +15,12 @@ class LatestBlogsList(APIView):
         serializer = BlogSerializer(blogs, many=True)
         return Response(serializer.data)
 
+    def post(self, request, format=None):
+        serializer= BlogSerializer(data=request.data)
+        if serializer.is_valid():
+                serializer.save()
+                return  Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class BlogDetail(APIView):
     def get_object(self, category_slug, blog_slug):
@@ -27,7 +34,9 @@ class BlogDetail(APIView):
         serializer = BlogSerializer(blog)
         return Response(serializer.data)
 
-
+class BlogViewset(viewsets.ModelViewSet):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
 class CategoryDetail(APIView):
     def get_object(self, category_slug):
         try:

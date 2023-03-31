@@ -10,7 +10,11 @@
                 
                 <p>{{ blog.content }}</p>
             </div>
-            
+            <div class="is-column is-3">
+                <button class="button is-danger" @click="deleteBlog(blog)">                       
+                                <p>DELETE</p>
+                        </button>
+            </div>
         </div>
     </div>
 </template>
@@ -44,7 +48,13 @@ export default{
                         console.log(error)
                     }
                 )
-        }
+        },
+        deleteBlog(blog) {
+           axios.delete(`/api/v1/getBlogs/${blog.id}/`) 
+            .then(location.href = '/my-account')
+            .catch(error=>console.log(error))
+        },
+        
     }
 }
 </script>
